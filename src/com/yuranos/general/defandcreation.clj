@@ -1,4 +1,4 @@
-(ns com.yuranos.general.general)
+(ns com.yuranos.general.defandcreation)
 
 ;Cleaning up namespace
 ;(map #(ns-unmap *ns* %) (keys (ns-interns *ns*)))
@@ -41,8 +41,10 @@
   (mymethod
     ([a b] 100)))
 
-(prn (baz "any value and I'll return 1"))      ; 1
-(prn (baz "any two values" "and I'll return 2")) ; 2
+(prn (baz "any value and I'll return 1"))
+; 1
+(prn (baz "any two values" "and I'll return 2"))
+; 2
 
 ; Constructor
 (defrecord Foo [a b]
@@ -85,7 +87,7 @@
 ;yuranos: my own defrecord example
 (defrecord FooNoInt [a b])
 (def fni (FooNoInt. "this is a" "this is b"))
-(def fnihashed #com.yuranos.general.general.FooNoInt[:hey :ho])   ;for defrecords and deftypes only
+(def fnihashed #com.yuranos.general.defandcreation.FooNoInt[:hey :ho])   ;for defrecords and deftypes only
 ;#com.yuranos.general.general.FooNoInt{:a :hey, :b :ho}
 
 (defn -main

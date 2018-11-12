@@ -2,4 +2,4 @@
   :description "This is the simplest possible Leiningen project."
   :url "http://github.com/clojurebook/ClojureProgramming"
   :dependencies [[org.clojure/clojure "1.8.0"]]
-  :main com.yuranos.general.general)
+  :main com.yuranos.general.multi)
