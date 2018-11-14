@@ -55,8 +55,10 @@
 (defmethod factorial :default [num]
   (* num (factorial (dec num))))
 
+;TODO: ask Vova
+;(defmulti service-charge (fn [acct] [(account-level acct) (:tag acct)]))
+
 ;5
-;TODO
 (defmulti bat
           (fn ([x y & xs]
                (mapv class (into [x y] xs)))))
@@ -70,15 +72,14 @@
   (str "number: " x " and " y))
 
 ;6
-;TODO
-(defmulti x (fn[_] :inc))
+(defmulti x (fn[_] :dec))
 (defmethod x :inc [y] (inc y))
 (defmethod x :dec [y] (dec y))
 (x 0) ;; => 1
-(defmulti x (fn[_] :dec)) ;; Can't redefine :(
+;(defmulti x (fn[_] :dec)) ;; Can't redefine :(
 (x 0) ;; => 1 ;; STILL :(
-(ns-unmap *ns* 'x) ;; => unmap the var from the namespace
-(defmulti x (fn[_] :dec))
+;(ns-unmap *ns* 'x) ;; => unmap the var from the namespace
+;(defmulti x (fn[_] :dec))
 (x 0) ;; => Exception, we now need to redefine our defmethods.
 
 
