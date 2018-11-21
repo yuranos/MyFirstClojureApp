@@ -55,7 +55,6 @@
 (defmethod factorial :default [num]
   (* num (factorial (dec num))))
 
-;TODO: ask Vova
 ;(defmulti service-charge (fn [acct] [(account-level acct) (:tag acct)]))
 
 ;5

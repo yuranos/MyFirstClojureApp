@@ -90,6 +90,10 @@
 (def fnihashed #com.yuranos.general.defandcreation.FooNoInt[:hey :ho])   ;for defrecords and deftypes only
 ;#com.yuranos.general.general.FooNoInt{:a :hey, :b :ho}
 
+(defn myfunction
+  ([a b]   (myfunction a b 100))
+  ([a b c] (* a b c)))
+
 (defn -main
   [& args]
   (println "List of namespaces: "(ns-interns *ns*))
