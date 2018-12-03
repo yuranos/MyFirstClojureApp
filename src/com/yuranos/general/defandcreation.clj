@@ -56,6 +56,7 @@
   (baz [this] (str "Bar Bazzer -> " a " / " b)))
 
 ; Either pass in each argument to the constructor separately
+;-> means a default constructor
 (def foo (->Foo :bar :baz)) ; user.Foo{:a :bar, :b :baz}
 
 ; Or pass a single argument with keys that align with the class' required parameters
