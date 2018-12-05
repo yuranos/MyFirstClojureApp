@@ -1,4 +1,5 @@
-(ns com.yuranos.general.macros)
+(ns com.yuranos.general.macros
+  (:import (com.sun.xml.internal.bind.v2 TODO)))
 
 
 (let [m {:1 1 :2 2 :3 3 :4 4}] (map list (keys m) (vals m)))
@@ -10,7 +11,7 @@
 
 (not-really-macro "test")
 
-;Working infix
+;Working infix (1 + 2)
 (defmacro infix
   [infixed]
   (list (second infixed) (first infixed) (last infixed))
@@ -18,6 +19,7 @@
 ;The problem here is with infixed evaluation: ClassCastException java.lang.Long cannot be cast to clojure.lang.IFn
 (defmacro infix-1
   [infixed]
+  (prn infixed)
   `((~second ~infixed) (~first ~infixed) (~last ~infixed))
   )
 ;Here the problem is with infixed: No such var: com.yuranos.general.macros/infixed
@@ -36,21 +38,23 @@
   [infixed]
   `(~(second infixed) ~(first infixed) ~(last infixed))
   )
-;TODO: ask Vova. ClassCastException java.lang.Long cannot be cast to clojure.lang.IFn
-;(defmacro infix
-;  [infixed]
-;  (((second infixed) (first infixed) (last infixed)))
-;  )
 
-
-
-(defmacro faulty-print
+(defmacro good-print
   [expression]
-  `(list
-    ~let [result expression]
-        (list println result)
-        result)
+  (list
+    'do
+    (list 'println expression)
+    expression)
   )
+
+;Correct code
+(defmacro my-print
+  [expression]
+  (list 'let ['result expression]
+        (list 'println 'result)
+        'result))
+
+;(defn faulty-print [expr] (println expr) expr)
 
 
 
