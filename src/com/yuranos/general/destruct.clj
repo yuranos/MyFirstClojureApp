@@ -11,3 +11,14 @@
 ;is the same as
 (let [a 1 b 2]
   (+ a b))
+
+
+;Associative destructuring
+(def client {:name "Super Co."
+             :location "Philadelphia"
+             :description "The worldwide leader in plastic tableware."})
+(let [{name :name
+       location :location
+       description :description} client]
+  (println name location "-" description))
+;= Super Co. Philadelphia - The worldwide leader in plastic tableware.

@@ -9,8 +9,6 @@
 
 (macroexpand `(not-really-macro "test"))
 
-(not-really-macro "test")
-
 ;Working infix (1 + 2)
 (defmacro infix
   [infixed]
@@ -54,16 +52,6 @@
         (list 'println 'result)
         'result))
 
-;(defn faulty-print [expr] (println expr) expr)
-
-
-
-
-
-
-
-
-
 ;Need to ' quote the symbols you don't want to get the value from
 (defmacro my-print
   [expression]
@@ -84,3 +72,49 @@
      ~@forms))
 
 ;(unless (= 1 2) "one does not equal two" "one equals two. How come?")
+
+
+
+(defmacro code-critic1
+  "Phrases are courtesy Hermes Conrad from Futurama"
+  [bad good]
+  (list 'do
+        (list 'println
+              "Great squid of Madrid, this is bad code:"
+              (list 'quote bad))
+        (list 'println
+              "Sweet gorilla of Manila, this is good code:"
+              (list 'quote good))))
+
+
+;Calling this function in isolation will fail epically:
+;(criticize-code "Cursed bacteria of Liberia, this is bad code:" (1 + 2))
+;
+;ClassCastException java.lang.Long cannot be cast to clojure.lang.IFn
+;But inside macros it is Ok
+(defn criticize-code
+  [criticism code]
+  `(println ~criticism (quote ~code)))
+
+(defmacro code-critic
+  [bad good]
+  `(do ~@(map #(apply criticize-code %)
+             [["Great squid of Madrid, this is bad code:" bad]
+              ["Sweet gorilla of Manila, this is good code:" good]])))
+
+;Validation implementation example
+;(def order-details
+;  {:name "Mitchard Blimmons"
+;   :email "mitchard.blimmonsgmail.com"})
+;
+;(validate order-details order-details-validations)
+;
+;(def order-details-validations
+;  {:name
+;   ["Please enter a name" not-empty]
+;
+;   :email
+;   ["Please enter an email address" not-empty
+;
+;    "Your email address doesn't look like an email address"
+;    #(or (empty? %) (re-seq #"@" %))]})
