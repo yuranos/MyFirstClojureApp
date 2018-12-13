@@ -103,18 +103,82 @@
               ["Sweet gorilla of Manila, this is good code:" good]])))
 
 ;Validation implementation example
-;(def order-details
-;  {:name "Mitchard Blimmons"
-;   :email "mitchard.blimmonsgmail.com"})
-;
+(def order-details
+  {:name "Mitchard Blimmons"
+   :email "mitchard.blimmonsgmail.com"})
+
+(defn error-messages-for
+  "Return a seq of error messages"
+  [to-validate message-validator-pairs]
+  (map first (filter #(not ((second %) to-validate))(partition 2 message-validator-pairs))))
+
+(defn validate
+  "Returns a map with a vector of errors for each key"
+  [to-validate validations]
+  (reduce (fn [errors validation]
+            (let [[fieldname validation-check-groups] validation
+                  value (get to-validate fieldname)
+                  error-messages (error-messages-for value validation-check-groups)]
+              (if (empty? error-messages)
+                errors
+                (assoc errors fieldname error-messages))))
+          {}
+          validations))
+
+(defn if-valid
+  [record validations success-code failure-code]
+  (let [errors (validate record validations)]
+    (if (empty? errors)
+      success-code
+      failure-code)))
+
 ;(validate order-details order-details-validations)
-;
-;(def order-details-validations
-;  {:name
-;   ["Please enter a name" not-empty]
-;
-;   :email
-;   ["Please enter an email address" not-empty
-;
-;    "Your email address doesn't look like an email address"
-;    #(or (empty? %) (re-seq #"@" %))]})
+
+(def order-details-validations
+  {:name
+   ["Please enter a name" not-empty]
+
+   :email
+   ["Please enter an email address" not-empty
+
+    "Your email address doesn't look like an email address"
+    #(or (empty? %) (re-seq #"@" %))]})
+
+
+;Threading macros
+(defn transform [person]
+  (update (assoc person :hair-color :gray) :age inc))
+
+(defn transform* [person]
+  (-> person
+      (assoc :hair-color :gray)
+      (update :age inc)))
+
+(-> {:name "Socrates", :age 40, :hair-color :gray} :hair-color name clojure.string/upper-case)
+;"GRAY"
+
+(defn calculate []
+  (reduce + (map #(* % %) (filter odd? (range 10)))))
+
+(->> (range 10) (filter odd?) (map #(* % %)) (reduce +))
+
+(as-> [:foo :bar] v
+      (map name v)
+      (first v)
+      (.substring v 1))
+
+(when-let [counter (:counter {:counter "2"})] (inc (Long/parseLong counter)))
+;same as
+(some-> {:counter "2"} :counter Long/parseLong inc)
+;Can be just chaining:
+(some-> "123" Long/parseLong)
+;This one will only work if there are no nils along the way of processing
+;(-> {:1 'a :2 'b} :counter Long/parseLong inc)
+(defn describe-number [n]
+  (cond-> [] ;this line just creates a new vector
+          (odd? n) (conj "odd")
+          (even? n) (conj "even")
+          (zero? n) (conj "zero")
+          (pos? n) (conj "positive")))
+
+
