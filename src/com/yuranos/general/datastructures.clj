@@ -21,3 +21,14 @@
 
 (map (partial apply +) [[1 2] [3 4]]) ; => (3 7)
 
+
+(defstruct mystruct :foo :bar)
+
+(struct mystruct "eggplant" "pizza")
+;{:foo "eggplant", :bar "pizza"}
+(struct mystruct "eggplant")
+;{:foo "eggplant", :bar nil}
+(struct mystruct)
+;{:foo nil, :bar nil}
+
+
