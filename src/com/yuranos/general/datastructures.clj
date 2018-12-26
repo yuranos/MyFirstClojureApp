@@ -1,5 +1,5 @@
 (ns com.yuranos.general.datastructures
-  (:import (java.util Random)))
+  (:require [clojure.set :as set]))
 ;Two variants of how to get key from map2 where values don't match
 (def map1 {1 44 2 33})
 (def map2 {1 55 2 33})
@@ -46,6 +46,7 @@
          password (take n (repeatedly #(rand-nth chars)))]
      (reduce str password))))
 
+;Map struct
 (defstruct attendee :firstname :lastname)
 
 (def x (map (fn [x]
@@ -57,7 +58,15 @@
                 :age 30))
             (map fixed-length-name-generator (repeat 10 10))))
 (def firstname (accessor attendee :firstname))
-(reduce (fn [n y] (concat n (:firstname y))) 0 x)
+
+(reduce (fn [a b] (conj a (:firstname b))) [] x)
 
 ;(map fixed-length-name-generator (repeatedly 10 (constantly 10)))
 
+;Combining collections:
+(into {:x 4} [{:a 1} {:b 2} {:c 3}])
+;{:x 4, :a 1, :b 2, :c 3}
+
+;Working with sets
+(set/difference #{:1 :2 :3} #{:2})
+(set/intersection #{:1 :2 :3} #{:2})

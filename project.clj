@@ -8,5 +8,5 @@
                  [spyscope "0.1.4"]]
   ;Can be used like (apply + #spy/p (range 11 20 2))
   :injections [(require 'spyscope.core)]
-  :main com.yuranos.general.various-functions)
+  :main com.yuranos.general.datatypes)
   ;:main com.yuranos.general.loops)

@@ -10,9 +10,10 @@
 
 ;defrecords and defprotocols
 ; Interface
-;From doc: defprotocol is dynamic, has no special compile-time  effect, and defines no new types or classes.
+;From doc: defprotocol is dynamic, has no special compile-time  effect,
+; and defines no new types or classes.
 
-(defprotocol P  (fooMethod [this])  (bar-me [this] [this y]))
+(defprotocol P (fooMethod [this]) (bar-me [this] [this y]))
 (deftype FooType [a b c]  P (fooMethod [this] a) (bar-me [this] b) (bar-me [this y] (+ c y)))
 (bar-me (FooType. 1 2 3) 42)
 ;=> 45
@@ -31,7 +32,8 @@
 ; instead use `extend-protocol` for those situations
 ; see following example
 
-;yuranos: can be used in lieu of extend-type but can represent multiple types (Can be more than Integer)
+;yuranos: can be used in lieu of extend-type
+; but can represent multiple types (Can be more than Integer)
 (extend-protocol Bazzer
   Integer ; the return type determines if symbols referenced (e.g. a and b) can be resolved
   ; if not defined (or the wrong type) then errors can occur
@@ -48,7 +50,8 @@
 
 ; Constructor
 (defrecord Foo [a b]
-  Bazzer ; enforces the interface (but the error thrown without this defined, doesn't actually clarify)
+  Bazzer ; enforces the interface (but the error thrown without this defined,
+  ; doesn't actually clarify)
   (baz [this] "Foo Bazzer")) ; associate a function with our `defrecord` map
 
 ; Constructor
