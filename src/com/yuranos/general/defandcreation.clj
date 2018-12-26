@@ -24,7 +24,7 @@
 ;=> 21
 
 
-
+;Extend BEGIN
 (defprotocol Bazzer
   "This is an interface that states a `baz` method should be implemented"
   (baz [this] [a b])
@@ -34,19 +34,32 @@
 
 ;yuranos: can be used in lieu of extend-type
 ; but can represent multiple types (Can be more than Integer)
+;(extend) is also very similar but more verbose - you need to specify a map with keywords
+;Here we basically extent every single Long we will use from now on.
 (extend-protocol Bazzer
-  Integer ; the return type determines if symbols referenced (e.g. a and b) can be resolved
-  ; if not defined (or the wrong type) then errors can occur
+  Long
   (baz
     ([a] 1)
     ([a b] 2))
   (mymethod
     ([a b] 100)))
 
-(prn (baz "any value and I'll return 1"))
+(prn (baz 12323))
 ; 1
-(prn (baz "any two values" "and I'll return 2"))
+(prn (baz 12312 123123))
 ; 2
+
+;(extend-type Bazzer
+;  Integer ; the return type determines if symbols referenced (e.g. a and b) can be resolved
+;  ; if not defined (or the wrong type) then errors can occur
+;  (baz
+;    ([a] 1)
+;    ([a b] 2))
+;  (mymethod
+;    ([a b] 100)))
+
+;Extend END
+
 
 ; Constructor
 (defrecord Foo [a b]
