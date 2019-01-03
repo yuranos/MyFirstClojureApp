@@ -9,8 +9,12 @@
 ;Each method fn takes an additional implicit
 ;first arg, which is bound to 'this.
 (defn myproxy[& i]
-  (proxy [clojure.lang.ISeq com.yuranos.javafiles.ShittyInterface][]
+  (proxy [;class must be first
+          com.yuranos.javafiles.ShittyClass
+          clojure.lang.ISeq
+          com.yuranos.javafiles.ShittyInterface]["I'm useless"]
     (seq [] (sort i))
-    (toString [] (apply str (interpose "-" i))))
-    (printShit [] (prn "Shit")))
-
+    (toString [] (apply str (interpose "-" i)))
+    (printShit [] (prn "Shit"))
+    (abstractMethod [] (prn (.getClassMission this)))) )
+;Java stuff should be called with dot notation: (.printShit (myproxy 4 3 2 1))
