@@ -16,6 +16,12 @@ public abstract class ShittyClass {
 // IllegalArgumentException No matching field found: abstractMethod for class com.yuranos.general.datatypes.proxy$com.yuranos.javafiles.ShittyClass$ISeq$ShittyInterface$9bd1e475  clojure.lang.Reflector.getInstanceField (Reflector.java:271)
     public abstract void abstractMethod();
 
+    public abstract void abstractMethod(String str);
+
+    public void realMethod(String str) {
+        abstractMethod(str);
+    }
+
     public void realMethod() {
         abstractMethod();
     }
