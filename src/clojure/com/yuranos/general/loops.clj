@@ -72,6 +72,19 @@
 ;10 ;because max is now acting as min
 
 
+;For loops
+;binding forms can be followed by 3 modifiers: let, when and while
+(for [x (range 3) y (range 3) :when (not= x y)] [x y])
+;([0 1] [0 2] [1 0] [1 2] [2 0] [2 1])
+(for [x (range 3) y (range 3) :while (not= x y)] [x y])
+;([1 0] [2 0] [2 1])
+(for [x [0 1 2 3 4 5]
+      :when (not= x 2)
+      :let [y (* x 3)]
+      :when (even? y)]
+  y)
+;(0 12)
+
 (defn -main
   [& args]
   (prn (loop [sum 0
