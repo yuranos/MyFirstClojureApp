@@ -23,7 +23,7 @@
 (map (partial apply +) [[1 2] [3 4]]) ; => (3 7)
 
 ;; Note the equivalence of the following two forms
-;So, apply is good when youa lready have a vector
+;So, apply is good when you already have a vector
 (apply str ["str1" "str2" "str3"])  ;;=> "str1str2str3"
 (str "str1" "str2" "str3")          ;;=> "str1str2str3"
 

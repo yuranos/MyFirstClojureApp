@@ -1,4 +1,33 @@
-(ns com.yuranos.general.transducers))
+(ns com.yuranos.general.transducers)
+
+;Based on the article: https://eli.thegreenplace.net/2017/reducers-transducers-and-coreasync-in-clojure/
+;What we want to do more effectively
+(def s (range 0 10))
+(reduce + (map inc (filter even? s)))
+
+(defn mapping-transform
+  [mapf]
+  (fn [reducingf]
+    (fn [acc item]
+      (reducingf acc (mapf item)))))
+(reduce ((mapping-transform #(* % %)) +) 0 s)
+;285
+
+(defn filtering-transform
+  [predicate]
+  (fn [reducingf]
+    (fn [acc item]
+      (if (predicate item)
+        (reducingf acc item)
+        acc))))
+(reduce ((filtering-transform even?) +) 0 s)
+;20
+
+;And all together
+(reduce ((filtering-transform even?) ((mapping-transform inc) +)) 0 (range 0 10))
+;Same as
+(reduce ((comp (filter even?) (map inc)) +) 0 (range 0 10))
+
 
 ;Most important operations:
 into -
@@ -14,6 +43,19 @@ mapcat - similar to flatMap
 (transduce xf conj (range 10))
 ;; => [1 3 5 7 9] - not a list, vector. (filter odd? (range 10)) will return a list.
 
+;This
+(def xform
+  (comp
+    (partial filter odd?)
+    (partial map #(+ 2 %))))
+(reduce + (xform (range 0 10)))
+;Is the same as this
+(def xform
+  (comp
+    (map #(+ 2 %))
+    (filter odd?)))
+(transduce xform + (range 0 10))
+;Both return 35
 
 ;MAPCAT
 ;Take elements of outer collection one by one, apply reverse to them,
@@ -24,11 +66,10 @@ mapcat - similar to flatMap
 (concat (map reverse [[3 2 1 0] [6 5 4] [9 8 7]]))
 ;((0 1 2 3) (4 5 6) (7 8 9))
 
-
-
 (map reverse [[3 2 1 0] [6 5 4] [9 8 7]])
 (concat '((0 1 2 3) (4 5 6) (7 8 9)))
 
+;INTO
 (into [] (comp cat cat (map inc)) [[[1] [2]] [[3] [4]]])
 
 (map
@@ -59,3 +100,6 @@ mapcat - similar to flatMap
 
 (transduce + 0 (range 10))
 (reduce + 0 (range 10))
+
+
+
