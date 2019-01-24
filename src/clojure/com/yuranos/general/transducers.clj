@@ -29,13 +29,102 @@
 (reduce ((comp (filter even?) (map inc)) +) 0 (range 0 10))
 
 
+;Another article
+;Multiple arity required
+(fn [reduction-function]
+  (fn
+    ([] (reduction-function))
+    ([result] (reduction-function result))
+    ([result input]
+     (reduction-function result input))))
+
 ;Most important operations:
-into -
-transduce -
-cat -
-completing -
-comp -
-mapcat - similar to flatMap
+;into - see below. Convenient form to avoidusing conj
+;transduce - [xform f init coll]
+;cat - sort of flatmapping
+;completing - adds an identity function to a reduce function as a fuction to call for arity-1 to make it available for transducers
+;comp - composing transducers
+;mapcat - similar to flatMap
+
+;From: https://labs.uswitch.com/transducers-from-the-ground-up-the-essence/
+;Transduce
+(transduce (map inc) conj (range 10))
+;(map inc) accept a reducing function conj
+;and then the resulting reducing function will walk through the range
+;Same as:
+(reduce ((map inc) conj) [] (range 10))
+
+;([inc]
+;  (fn [conj]
+;    (fn
+;      ([] (conj))
+;      ([result] (conj result))
+;      ([result input]
+;       (conj result (inc input)))
+;      ([result input & inputs]
+;       (conj result (apply inc input inputs))))))
+
+
+
+
+
+
+
+
+
+
+
+
+;but more convenient
+;No need for conj, the collection type is inferred
+(sequence (map inc) (range 10))
+;same as
+(eduction (map inc) (range 10))
+
+(into [] (map inc) (range 10))
+
+;Comp - the way to compose transducers.
+;Otherwise, you can only feed 1 reduction function
+; to a transducer to produce a transformed reduction function.
+(def xf
+  (comp
+    (filter odd?)
+    (map inc)
+    (take 5)))
+
+;Into
+;Has a form:
+;(into to xform from)
+; Define the transducer with `comp` but in `->` order:
+(def xform (comp (map #(+ 2 %))
+                 (filter odd?)))
+; adds 2, then omits if result is even.
+(into [-1 -2] xform (range 10))
+; => [-1 -2 3 5 7 9 11]
+;Similar to
+(transduce xform conj [-1 -2] (range 10))
+
+;Cat - sort of flatmapping
+(into [] (comp cat cat (map inc)) [[[1] [2]] [[3] [4]]])
+;[2 3 4 5]
+(into [] (comp cat (map inc)) [[1] [2]])
+;[2 3]
+
+;Another example:
+;; Remove the need of (mapcat identity coll) idiom:
+(def rota (sequence cat (repeat ["tom" "nick" "jane"])))
+(nth rota 7) ; who's up next week?
+
+;Completing
+;; Fix apparently inconsistent behaviour of - with transduce:
+(transduce (map inc) - 0 (range 10))
+;; 55
+(transduce (map inc) (completing -) 0 (range 10))
+;; -55
+
+
+
+
 ;; Used without a collection, filter will create a transducer:
 (def xf (filter odd?))
 
@@ -68,9 +157,6 @@ mapcat - similar to flatMap
 
 (map reverse [[3 2 1 0] [6 5 4] [9 8 7]])
 (concat '((0 1 2 3) (4 5 6) (7 8 9)))
-
-;INTO
-(into [] (comp cat cat (map inc)) [[[1] [2]] [[3] [4]]])
 
 (map
   (comp - (partial + 3) (partial * 2))
