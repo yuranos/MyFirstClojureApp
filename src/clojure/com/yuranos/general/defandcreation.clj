@@ -1,4 +1,6 @@
-(ns com.yuranos.general.defandcreation)
+(ns com.yuranos.general.defandcreation
+  (:import (clojure.java.api Clojure)
+           (com.sun.org.apache.xalan.internal.xsltc.compiler If)))
 
 ;Cleaning up namespace
 ;(map #(ns-unmap *ns* %) (keys (ns-interns *ns*)))
@@ -48,6 +50,13 @@
 ; 1
 (prn (baz 12312 123123))
 ; 2
+;BEST PRACTICE
+;By Rich Hickey:
+;If a protocol comes with Clojure itself, avoid extending it to types
+;you don't own, especially e.g. java.lang.String and other core Java
+;interfaces. Rest assured if a protocol should extend to it, it will,
+;else lobby for it.
+;https://groups.google.com/forum/#!msg/clojure/vyX5-F3NiVg/Ti1apkxDFl0J
 
 ;(extend-type Bazzer
 ;  Integer ; the return type determines if symbols referenced (e.g. a and b) can be resolved
@@ -96,6 +105,19 @@
 (prn (baz baril)) ; "Bar Bazzer -> boo / yah""
 ; (prn (baz baril :a :b))
 
+
+;EXTEND VIA METADATA
+(defprotocol Component
+  ;the name of the protocol doesn't matter.
+  ;It seems the only thing that does matter is method declaration.
+  :extend-via-metadata true
+  (start [component]))
+(def component (with-meta {:name "whatever"} {`start (constantly "started")}))
+(start component)
+
+
+(defprotocol P (report [x]))
+(report (with-meta [1 2 3] {`report (constantly "yo")}))
 
 ;(defn -main
 ;  [& args]

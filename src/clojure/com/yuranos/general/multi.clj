@@ -18,6 +18,28 @@
 (defn do-a-thing-with-a-long "I'm a Long" [in]
    in)
 
+;MULTIMETHODS
+;3
+;(defmulti greetingfn
+;          (fn[{:keys [language] :strs}] ()))
+(defmulti greetingfn
+          (fn[x] (x "language")))
+;defmulti contains a dispatching function to be applied to arguments in order to produce dispatching value.
+(defmethod greetingfn (or "English" "Arabic")  [_]
+  "Hello!")
+(defmethod greetingfn "French" [_]
+  "Bonjour!")
+(defmethod greetingfn :default [params]
+  (throw (IllegalArgumentException.
+           (str "I don't know the " (params "language") " language"))))
+;(def english-map {"id" "1", "language" "English"})
+;(def  french-map {"id" "2", "language" "French"})
+;(def spanish-map {"id" "3", "language" "Spanish"})
+;=> (greetingfn english-map)
+;"Hello!"
+;(prefer-method greetingfn "English" "French") - not a working example, but kept for reference.
+
+
 ;1
 ;Multimethods - you will only need to change things once
 (defmulti do-a-thing-multi class)
@@ -31,22 +53,6 @@
 (defmethod greeting "English" [_] "Hi" _)
 (defmethod greeting "French" [_] "Salut" _)
 ;(greeting {:lang "English"})
-
-;3
-;(defmulti greetingfn
-;          (fn[{:keys [language] :strs}] ()))
-(defmulti greetingfn
-          (fn[x] (x "language")))
-(defmethod greetingfn "English" [_]
-  "Hello!")
-(defmethod greetingfn "French" [_]
-  "Bonjour!")
-(defmethod greetingfn :default [params]
-  (throw (IllegalArgumentException.
-           (str "I don't know the " (params "language") " language"))))
-;(def english-map {"id" "1", "language" "English"})
-;(def  french-map {"id" "2", "language" "French"})
-;(def spanish-map {"id" "3", "language" "Spanish"})
 
 
 ;4
