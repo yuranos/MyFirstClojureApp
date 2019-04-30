@@ -12,7 +12,7 @@
     (alter bar inc)
     (println "updated, foo:" @foo "bar:" @bar))))
 
-(go
+(async/go
  (dotimes [_ 10]
    (dosync
     (println "read, foo:" @foo "bar:" @bar))

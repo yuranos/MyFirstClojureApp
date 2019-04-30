@@ -2,14 +2,15 @@
 
 (def foo-agent (agent 1))
 
-(defn slow-inc [n]
-  (swap! counter inc)
+;defn has an implicit do: http://clojure-doc.org/articles/language/glossary.html#implicit-do
+(defn slow-inc-agent [n]
   (Thread/sleep 2000)
-  (inc n))
+  5)
 
+;Without sleeps will return three 1s.
 (do
-  (send foo-agent slow-inc)
-  (send foo-agent slow-inc)
+  (send foo-agent slow-inc-agent)
+  (send foo-agent slow-inc-agent)
   (println @foo-agent)
   (Thread/sleep 2500)
   (println @foo-agent)
