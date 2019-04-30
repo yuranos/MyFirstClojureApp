@@ -8,6 +8,7 @@
                  [ring/ring-core "1.6.3"]
                  [ring/ring-jetty-adapter "1.6.3"]
                  [org.clojure/tools.namespace "0.2.4"]
-                 [spyscope "0.1.6"]]
+                 [spyscope "0.1.6"]
+                 [org.clojure/core.async "0.4.490"]]
   ;Can be used like (apply + #spy/p (range 11 20 2))
   :injections [(require 'spyscope.core)])
