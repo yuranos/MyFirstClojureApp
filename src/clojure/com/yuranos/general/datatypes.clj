@@ -1,5 +1,6 @@
 (ns com.yuranos.general.datatypes
   (:import (clojure.lang ISeq)
+           (java.time Duration)
            (com.yuranos.javafiles InterfaceWithDefaultMethod ClassWithMission)))
 
 ;Gen-class came first, followed by deftype in clojure 1.2.
@@ -76,3 +77,10 @@
   "Something arg"
 
   )
+
+(defn printDuration
+  []
+  (let [poll-duration (Duration/ofMillis 1000)] (println poll-duration)))
+
+
+

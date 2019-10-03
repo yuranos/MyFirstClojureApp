@@ -3,7 +3,7 @@
   :url "http://github.com/clojurebook/ClojureProgramming"
   :source-paths      ["src/clojure"]
   :java-source-paths ["src/java"]
-  :main com.yuranos.general.refs
+  :main com.yuranos.general.datatypes
   :dependencies [[org.clojure/clojure "1.10.0"]
                  [ring/ring-core "1.6.3"]
                  [ring/ring-jetty-adapter "1.6.3"]
